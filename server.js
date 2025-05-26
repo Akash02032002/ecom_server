@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser'; 
 import path from 'path';
 import cors from "cors";
 
@@ -23,8 +23,7 @@ app.use(cookieParser()); // Parse cookies from the request headers
 // Configure CORS with specific options
 app.use(
   cors({
-      // origin: [process.env.CLIENT_URL],
-    origin: ["https://ecom-client-seven.vercel.app"], // Allows requests from the client URL
+    origin: [process.env.CLIENT_URL], // Allows requests from the client URL defined in .env
     methods: ["GET", "POST", "PUT", "DELETE"], // Specifies allowed HTTP methods
     credentials: true, // Allows cookies to be sent with cross-origin requests
   })
@@ -39,7 +38,7 @@ app.use("/api/analytics", analyticsRoutes);
 
 
 app.listen(PORT, () => {
-  console.log('Server is running on http://localhost:' + PORT);
+  console.log('Server is running on http://localhost:' + PORT); 
 
   connectDB();
 });
