@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'; 
 import path from 'path';
-import cors from "cors";
+import cors from 'cors';
 
 import authRoutes from './routes/auth.route.js';
 import productRoutes from './routes/product.route.js';
@@ -13,32 +13,42 @@ import analyticsRoutes from './routes/analytics.route.js';
 import { connectDB } from './lib/db.js';
 
 dotenv.config();
-const PORT = process.env.PORT || 5000; // Added a default port for robustness
+const PORT = process.env.PORT || 5000;
 const app = express();
 
-const __dirname= path.resolve();
-app.use(express.json({limit: "10mb"})); // Parse JSON bodies (as sent by API clients)
-app.use(cookieParser()); // Parse cookies from the request headers
+const __dirname = path.resolve();
 
-// Configure CORS with specific options
+// Middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(cookieParser());
+
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL], // Allows requests from the client URL defined in .env
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specifies allowed HTTP methods
-    credentials: true, // Allows cookies to be sent with cross-origin requests
+    origin: [process.env.CLIENT_URL],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
   })
 );
 
-app.use("/api/auth" , authRoutes);
-app.use("/api/products" , productRoutes);
-app.use("/api/cart" , cartRoutes);
-app.use("/api/coupons" , couponRoutes);
-app.use("/api/payments" , paymentRoutes);
-app.use("/api/analytics", analyticsRoutes);
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
+// Serve static frontend in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
 
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+  });
+}
+
+// Start server
 app.listen(PORT, () => {
-  console.log('Server is running on http://localhost:' + PORT); 
-
+  console.log(`Server is running on http://localhost:${PORT}`);
   connectDB();
 });
