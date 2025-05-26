@@ -41,8 +41,11 @@ export const createCheckoutSession = async (req, res) => {
 			payment_method_types: ["card"],
 			line_items: lineItems,
 			mode: "payment",
-			success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+			// Replaced process.env.CLIENT_URL with the hardcoded URL
+			success_url: `https://ecom-client-seven.vercel.app/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `https://ecom-client-seven.vercel.app/purchase-cancel`,
+			// / success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+			// /cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
 			discounts: coupon
 				? [
 						{
