@@ -38,6 +38,10 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Nice working");
+});
+
 
 // Start server
 app.listen(PORT, () => {
